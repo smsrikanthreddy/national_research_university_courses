@@ -14,7 +14,10 @@ class ThreadRanker(object):
 
     def __load_embeddings_by_tag(self, tag_name):
         embeddings_path = os.path.join(self.thread_embeddings_folder, tag_name + ".pkl")
+        #if os.path.exists(embeddings_path):
         thread_ids, thread_embeddings = unpickle_file(embeddings_path)
+        #else:
+            
         return thread_ids, thread_embeddings
 
     def get_best_thread(self, question, tag_name):
@@ -115,7 +118,11 @@ class DialogueManager(object):
             
             # Pass prepared_question to thread_ranker to get predictions.
             #thread_id = #### YOUR CODE HERE ####
-            thread_id = self.thread_ranker.get_best_thread(prepared_question, tag)
+            embeddings_path = os.path.join('/root/coursera/thread_embeddings_by_tags', tag_name + ".pkl")
+            if os.path.exists(embeddings_path):
+                thread_id = self.thread_ranker.get_best_thread(prepared_question, tag)
+            else:
+                thread_id = '. The bot doesnot identify these as of now'
            
             return self.ANSWER_TEMPLATE % (tag, thread_id)
 
